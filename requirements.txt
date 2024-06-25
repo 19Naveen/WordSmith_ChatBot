@@ -1,0 +1,16 @@
+langchain
+langchain-community
+pypdf
+langchain-text-splitters
+langchain-chroma
+google-generativeai
+unstructured
+unstructured[pdf]
+gradio
+
+InstructorEmbedding
+
+'''
+!git clone https://github.com/HKUNLP/instructor-embedding
+!pip install -r instructor-embedding/requirements.txt
+'''
