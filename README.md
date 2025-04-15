@@ -34,7 +34,9 @@ Word Smith is an intelligent chatbot powered by Retrieval-Augmented Generation (
 3. Install Instructor Embeddings:
    ```
    git clone https://github.com/HKUNLP/instructor-embedding
-   pip install -r instructor-embedding/requirements.txt
+   cd instructor-embedding
+   pip install -r requirements.txt
+   pip install .
    ```
 
 4. Set up your Google Palm API key:

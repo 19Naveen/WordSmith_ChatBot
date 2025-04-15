@@ -6,12 +6,5 @@ langchain-chroma
 google-generativeai
 unstructured
 unstructured[pdf]
-gradio
-
-InstructorEmbedding
-
-'''
-Execute this to install Embeddings:
-!git clone https://github.com/HKUNLP/instructor-embedding
-!pip install -r instructor-embedding/requirements.txt
-'''
+tiktoken
+streamlit

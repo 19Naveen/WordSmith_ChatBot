@@ -37,6 +37,7 @@ def chat_with_bot(user_input, history, db):
             return "Database is not initialized. Please upload a PDF first.", history
         response = retrieve_info(db, query=user_input) 
         bot_response = response['result']
+        print('metadata:', response['sources'])
         history.append((user_input, bot_response))
         return bot_response, history
     except Exception as e:
