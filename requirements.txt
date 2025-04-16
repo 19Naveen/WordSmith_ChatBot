@@ -4,6 +4,9 @@ pypdf
 langchain-text-splitters
 langchain-chroma
 google-generativeai
+sentence_transformers 
+InstructorEmbedding 
+huggingface_hub
 unstructured
 unstructured[pdf]
 tiktoken
