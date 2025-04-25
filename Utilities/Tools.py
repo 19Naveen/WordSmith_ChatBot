@@ -13,7 +13,7 @@ class LLM:
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._llm_model = cls._instance._create_chat_model()
+            cls._instance.llm_model = cls._instance._create_chat_model()
         return cls._instance
 
     def _create_chat_model(self):
@@ -33,7 +33,7 @@ class LLM:
             raise RuntimeError(f"Failed to initialize Gemini model: {e}")
 
     def model(self):
-        return self._llm_model
+        return self.llm_model
 
 
 def create_chunks(pages, metadata=False):

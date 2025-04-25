@@ -26,8 +26,9 @@ def create_directory():
 
 def process_files(uploaded_files):
     """Simulates processing uploaded files (e.g., chunking, embedding)."""
+    return uploaded_files
 
-    def upload_file(file):
+def upload_file(file):
     if file is None:
         return "No file provided"
     file_path = os.path.join(PDF_PATH, file.name)

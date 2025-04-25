@@ -12,9 +12,8 @@ memory = ConversationSummaryBufferMemory(
 )
 
 # Configure Wikipedia wrapper
-wiki = WikipediaAPIWrapper(,
+wiki = WikipediaAPIWrapper(
     wiki_client=None,
-    search_results=1,
     lang="en",
     top_k_results=1,
     load_all_available_meta=True,

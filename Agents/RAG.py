@@ -15,5 +15,5 @@ def document_RAG():
     if not pages:
         return "No PDF documents found."
     chunks = create_chunks(pages, metadata=True)
-    db = create_vector_db(chunks, CHROMA_PATH='Chroma/', vector_name='Document_Vector')
+    db = create_vector_db(chunks, CHROMA_PATH='Chroma/', collection_name='Document_Vector')
     return db
