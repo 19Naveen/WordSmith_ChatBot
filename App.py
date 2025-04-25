@@ -3,7 +3,7 @@ import time
 from Utilities.setup import create_directory, HTML_Template
 from Agents.RAG import document_RAG
 from Agents.URL import url_RAG
-from Agents.Wiki import create_wiki_db
+from Agents.Wiki import createyy_wiki_db
 from Agents.chat_interface import chat_with_llm
 from Utilities.Tools import chat_with_bot
 
