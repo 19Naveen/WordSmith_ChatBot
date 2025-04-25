@@ -28,19 +28,8 @@ def process_files(uploaded_files):
     """Simulates processing uploaded files (e.g., chunking, embedding)."""
     return uploaded_files
 
-    if os.path.exists(CHROMA_PATH):
-        for file in os.listdir(CHROMA_PATH):
-            Path = os.path.join(CHROMA_PATH, file)
-            os.remove(CHROMA_PATH)
-        print("Directory Files has been removed successfully")
 
-    if not os.path.exists(CHROMA_PATH):
-        os.mkdir(CHROMA_PATH)
-
-def process_files(uploaded_files):
-    """Simulates processing uploaded files (e.g., chunking, embedding)."""
-
-    def upload_file(file):
+def upload_file(file):
     if file is None:
         return "No file provided"
     file_path = os.path.join(PDF_PATH, file.name)

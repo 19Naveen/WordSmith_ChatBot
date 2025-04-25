@@ -20,12 +20,12 @@ class LLM:
         """
         Creates a Google Generative AI model using Gemini.
         """
-        api_key = os.getenv("GOOGLE_API_KEY")
-        if not api_key:
+        google_api_key = os.getenv("GOOGLE_API_KEY")
+        if not google_api_key:
             raise EnvironmentError("Missing GOOGLE_API_KEY in .env.")
         try:
             return ChatGoogleGenerativeAI(
-                google_api_key=api_key,
+                api_key=google_api_key,
                 model='gemini-1.5-flash-latest',
                 temperature=0.5
             )
