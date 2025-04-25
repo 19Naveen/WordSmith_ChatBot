@@ -1,29 +1,22 @@
-from Utilities.Tools import create_vector_db, create_chunks
 from langchain.document_loaders import WebBaseLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from Utilities.Tools import create_vector_db, create_chunks
 
 def process_url(url: str):
-    """
-    Loads content from a given URL using WebBaseLoader.
-    """
+    """Load and return documents from a URL."""
     loader = WebBaseLoader(url, show_progress=True, continue_on_failure=True)
-    docs = loader.load()
-    return docs
+    return loader.load()
 
 def preprocess(text: str) -> str:
-    """
-    Cleans up text by removing newlines and redundant spaces.
-    """
-    text = text.replace('\n', ' ').strip()
-    while '  ' in text:
-        text = text.replace('  ', ' ')
-    return text
+    """Remove excessive whitespace and line breaks."""
+    return ' '.join(text.replace('\n', ' ').split())
 
-
-def url_RAG(url):
+def url_RAG(url: str):
+    """Create a vector DB from web page content."""
     docs = process_url(url)
-    text = preprocess(docs)
-    text = create_chunks(text, False)
-    db = create_vector_db(text, 'Chroma/', 'URL_Vector')
+    if not docs:
+        return "No content loaded from URL."
+    raw_text = ' '.join([doc.page_content for doc in docs])
+    cleaned = preprocess(raw_text)
+    chunks = create_chunks(cleaned, metadata=False)
+    db = create_vector_db(chunks, 'Chroma/', 'URL_Vector')
     return db
-
