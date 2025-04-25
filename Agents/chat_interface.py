@@ -1,10 +1,10 @@
 from Utilities.Tools import LLM
 from langchain.memory import ConversationSummaryBufferMemory
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
+from langchain.chains.llm import LLMChain
 
+# Setup
 llm = LLM().model()
-
 memory = ConversationSummaryBufferMemory(
     llm=llm,
     max_token_limit=5000,
@@ -21,14 +21,14 @@ prompt = PromptTemplate(
     User: {input}
     AI:"""
 )
+
+# Create chain
 chain = LLMChain(llm=llm, prompt=prompt, memory=memory)
 
 def chat_with_llm(query: str) -> str:
-    '''
-    Function to interact with the LLM
-        query (str): The input query to send to the LLM
-    Returns:
-        str: The response from the LLM
-    '''
-    response = chain.invoke({"input": query})
-    return response['text']
+    """Interact with LLM using a conversational chain."""
+    try:
+        response = chain.invoke({"input": query})
+        return response['text']
+    except Exception as e:
+        return f"Error during LLM interaction: {e}"

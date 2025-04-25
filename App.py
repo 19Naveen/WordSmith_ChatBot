@@ -1,63 +1,10 @@
 import streamlit as st
 import time 
+from Utilities.setup import create_directory, HTML_Template
 
+create_directory()
 st.set_page_config(page_title="WordSmith Chatbot", layout="wide", initial_sidebar_state="expanded")
-st.markdown("""
-<style>
-    .sidebar .sidebar-content {
-        background-color: #f0f2f6;
-    }
-    .stButton>button {
-        width: 100%;
-    }
-    .chat-title {
-        text-align: center;
-        color: #2a9df4; /* Example color */
-    }
-    .chat-subtitle {
-        text-align: center;
-        color: #555;
-        margin-bottom: 2rem;
-    }
-    .source-box {
-        border: 1px solid #e6e6e6;
-        padding: 5px;
-        padding-bottom:5px;
-        border-radius: 5px;
-        background-color: grey;
-        margin-bottom: 5px;
-        font-size: 0.9em;
-        color: black;
-        white-space: pre-wrap; /* Preserve whitespace and wrap */
-        word-wrap: break-word; /* Break long words */
-    }
-    .stChatInputContainer > div {
-        background-color: #f0f2f6; /* Input container background */
-    }
-    .st-emotion-cache-usj992 { /* Target the main block container */
-        border-top: 2px solid #e0e0e0; /* Add a top border to the main content area */
-        padding-top: 2rem;
-    }
-    .st-emotion-cache-1c7y2kd { /* Target Send button specifically if needed */
-       /* Add specific styles */
-    }
-    .sidebar-title {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    /* Adjust chat message styling */
-    [data-testid="chatAvatarIcon-user"] { /* User avatar */
-        background-color: #cceeff; /* Light blue background */
-        color: #0056b3; /* Dark blue icon */
-    }
-    [data-testid="chatAvatarIcon-assistant"] { /* Assistant avatar */
-       background-color: #e8e8e8; /* Light gray background */
-       color: #333; /* Dark gray icon */
-    }
-
-</style>
-""", unsafe_allow_html=True)
+st.markdown(HTML_Template, unsafe_allow_html=True)
 
 # ------------- SESSION STATE INITIALIZATION -------------
 if "chat_history" not in st.session_state:
@@ -83,21 +30,6 @@ if "needs_processing" not in st.session_state:
 
 
 # ------------- BACKEND FUNCTIONS -------------
-def process_files(uploaded_files):
-    """Simulates processing uploaded files (e.g., chunking, embedding)."""
-    processed_names = set()
-    new_files_processed = False
-    if uploaded_files:
-        for file in uploaded_files:
-            if file.name not in st.session_state.processed_file_names:
-                st.write(f"Processing {file.name}...") # Simulate work
-                time.sleep(1) # Simulate processing time
-                st.session_state.processed_file_names.add(file.name)
-                processed_names.add(file.name)
-                new_files_processed = True
-        if new_files_processed:
-            st.toast(f"✅ Processed files: {', '.join(processed_names)}", icon="📄")
-    return new_files_processed
 
 def process_urls(urls_to_process):
     """Simulates processing added URLs (e.g., fetching, chunking, embedding)."""
@@ -165,18 +97,8 @@ def get_wiki_response(question):
         f"Wikipedia: [Page about {question}](https://en.wikipedia.org/wiki/...) - Section: Introduction",
         f"Wikipedia: [Page about {question}](https://en.wikipedia.org/wiki/...) - Section: Key Concepts"
     ]
-    # You might use a library like `wikipedia` here
-    # import wikipedia
-    # try:
-    #     page = wikipedia.page(question, auto_suggest=False)
-    #     response = f"According to Wikipedia on **'{question}'**:\n\n{wikipedia.summary(question, sentences=3)}"
-    #     sources = [f"Wikipedia: [{page.title}]({page.url})"]
-    # except wikipedia.exceptions.PageError:
-    #     response = f"Sorry, I couldn't find a specific Wikipedia page for '{question}'."
-    #     sources = []
-    # except wikipedia.exceptions.DisambiguationError as e:
-    #     response = f"'{question}' could refer to multiple things. Please be more specific. Options: {e.options[:5]}"
-    #     sources = []
+
+    sources.append(f"Wikipedia: [Page about {question}](https://en.wikipedia.org/wiki/{question}) - Section: Additional Information")
 
     return response, sources
 
@@ -187,14 +109,13 @@ with st.sidebar:
     # --- Mode Selection ---
     selected_mode = st.radio(
         "Choose Interaction Mode:",
-        options=["Chat with Documents (RAG)", "Chat with URLs", "Web Search", "Wikipedia Search"],
+        options=["General Chatbot", "Chat with Documents (RAG)", "Chat with URLs", "Web Search", "Wikipedia Search"],
         key="mode_selection", # Use a distinct key
         on_change=lambda: st.session_state.update(mode=st.session_state.mode_selection) # Update main mode state on change
     )
-    # Ensure session_state.mode is updated immediately if radio changes
     if st.session_state.mode != st.session_state.mode_selection:
          st.session_state.mode = st.session_state.mode_selection
-         st.rerun() # Rerun to update conditional UI elements
+         st.rerun()
     st.divider()
 
     # --- Conditional Controls Based on Mode ---
@@ -205,11 +126,9 @@ with st.sidebar:
             "Add files to chat with",
             accept_multiple_files=True,
             type=["pdf", "txt", "docx"],
-            key="file_uploader" # Add a key
+            key="file_uploader"
         )
         if files_uploaded_now:
-             # Update the list of files in session state ONLY if new files are uploaded
-             # Check by name and size to be more robust than just object identity
              current_file_ids = {f"{f.name}_{f.size}" for f in st.session_state.uploaded_files_list}
              new_files_added = False
              for file in files_uploaded_now:
@@ -218,9 +137,9 @@ with st.sidebar:
                      st.session_state.uploaded_files_list.append(file)
                      new_files_added = True
              if new_files_added:
-                 st.session_state.needs_processing = True # Flag that processing is needed
+                 st.session_state.needs_processing = True 
                  st.success(f"✅ {len(files_uploaded_now)} file(s) ready. Process below.")
-                 st.rerun() # Rerun to reflect the updated file list immediately
+                 st.rerun() 
 
         # Display uploaded file names (from session state list)
         if st.session_state.uploaded_files_list:
@@ -321,7 +240,7 @@ with st.sidebar:
 
 
 # ------------- MAIN INTERFACE -------------
-st.markdown("<h1 class='chat-title'>💬 Gemini Chatbot</h1>", unsafe_allow_html=True)
+st.markdown("<h1 class='chat-title'>💬 WordSmith Chatbot</h1>", unsafe_allow_html=True)
 st.markdown(f"<p class='chat-subtitle'>Interacting via: <strong>{st.session_state.mode}</strong></p>", unsafe_allow_html=True)
 
 
